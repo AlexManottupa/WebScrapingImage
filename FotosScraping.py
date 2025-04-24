@@ -4,7 +4,7 @@ import os
 from urllib.parse import urljoin, urlparse
 
 # Página principal
-base_url = "https://froilanpaez.com/"
+base_url = "https://nameofweb.com/"
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -16,16 +16,16 @@ headers = {
 # Subpáginas relevantes encontradas manualmente
 subpaginas = [
     base_url,
-    "https://froilanpaez.com/perfectamente-natural/",
-    "https://froilanpaez.com/equipo-medico-de-especialistas/",
-    "https://froilanpaez.com/servicio-estadia/",
-    "https://froilanpaez.com/bichectomia/",
-    "https://froilanpaez.com/tratamiento-papada/",
+    "https://nameofweb/submodule/",
+    "https://nameofweb.com/submodule/",
+    "https://nameofweb.com/submodule/",
+    "https://nameofweb.com/submodule/",
+    "https://nameofweb.com/submodule/",
 ]
 
 # Crear carpetas
-os.makedirs("imagenes_froilan", exist_ok=True)
-os.makedirs("videos_froilan", exist_ok=True)
+os.makedirs("imagenes_", exist_ok=True)
+os.makedirs("images", exist_ok=True)
 
 descargadas = set()
 contador = 0
@@ -48,7 +48,7 @@ def descargar_archivo(url_archivo, carpeta, prefijo):
         with open(ruta, "wb") as f:
             f.write(contenido)
         descargadas.add(url_archivo)
-        if carpeta == "imagenes_froilan":
+        if carpeta == "imagenes_":
             print(f"[IMG ✓] {url_archivo}")
             contador += 1
         else:
@@ -74,9 +74,9 @@ def procesar_pagina(pagina_url):
                     if " " in src:
                         src = src.split(" ")[0]
                     if src.endswith((".jpg", ".jpeg", ".png", ".gif", ".webp")):
-                        descargar_archivo(src, "imagenes_froilan", f"{contador}")
+                        descargar_archivo(src, "imagenes", f"{contador}")
                     elif src.endswith((".mp4", ".webm", ".ogg")):
-                        descargar_archivo(src, "videos_froilan", f"{contador_videos}")
+                        descargar_archivo(src, "images", f"{contador_videos}")
 
         # background-image en estilos inline
         for tag in soup.find_all(style=True):
@@ -87,15 +87,15 @@ def procesar_pagina(pagina_url):
                 if start != -1 and end != -1:
                     url_fondo = style[start + 4:end].strip('\'"')
                     if url_fondo.endswith((".jpg", ".jpeg", ".png", ".webp")):
-                        descargar_archivo(url_fondo, "imagenes_froilan", f"{contador}")
+                        descargar_archivo(url_fondo, "imagenes", f"{contador}")
 
         # Etiquetas <video> con src o <source>
         for video in soup.find_all("video"):
             if video.get("src"):
-                descargar_archivo(video["src"], "videos_froilan", f"{contador_videos}")
+                descargar_archivo(video["src"], "images", f"{contador_videos}")
             for source in video.find_all("source"):
                 if source.get("src"):
-                    descargar_archivo(source["src"], "videos_froilan", f"{contador_videos}")
+                    descargar_archivo(source["src"], "images", f"{contador_videos}")
     except Exception as e:
         print(f"❌ Error en procesar_pagina({pagina_url}): {e}")
 
